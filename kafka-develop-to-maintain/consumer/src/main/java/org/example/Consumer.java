@@ -29,8 +29,8 @@ public class Consumer {
         properties.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(GROUP_ID_CONFIG, "group-4");
-        properties.put("enable.auto.commit", "true");
-        properties.put("auto.offset.reset", "earliest");
+        properties.put("enable.auto.commit", "false");
+        properties.put("auto.offset.reset", "latest");
         this.properties = properties;
     }
 
@@ -53,10 +53,11 @@ public class Consumer {
         consumer.subscribe(singleton(topic));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(50000));
-            records.forEach(record -> System.out.println(record.key() + " : " + record.value()));
-            if (records.isEmpty()) {
-                break;
-            }
+            records.forEach(record -> System.out.println(
+                    String.format("key: %s, value: %s, partition: %d, offset: %d",
+                            record.key(), record.value(), record.partition(), record.offset())
+            ));
+            consumer.commitSync();
         }
     }
 }
