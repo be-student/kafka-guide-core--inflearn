@@ -57,7 +57,7 @@ public class Consumer {
                     String.format("key: %s, value: %s, partition: %d, offset: %d",
                             record.key(), record.value(), record.partition(), record.offset())
             ));
-            consumer.commitSync();
+            consumer.commitAsync();
         }
     }
 }
