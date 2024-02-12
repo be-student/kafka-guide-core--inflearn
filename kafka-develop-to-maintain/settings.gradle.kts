@@ -4,3 +4,4 @@ include(
     "consumer"
 )
 include("consumer")
+include("main")
